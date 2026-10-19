@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<title>Вдох — один вдох, и стены отступают</title>
+<meta name="description" content="Минута дыхательной практики прямо в лифте, офисе или переговорке. Вдох 4 секунды, задержка 4 секунды, выдох 6 секунд. Без звука, без регистрации.">
+<meta property="og:title" content="Вдох">
+<meta property="og:description" content="Один вдох — и стены отступают.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='9' fill='%238ECAE6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400&display=swap">
+<script>document.documentElement.className += ' js';</script>
+<style>
+/* ---------- Tokens ---------- */
+:root {
+  --bg: #ffffff;
+  --ink: #1a1a1a;
+  --ink-2: #6b6b6b;
+  --sky: #8ecae6;
+  --line: rgba(26, 26, 26, 0.12);
+  --warm: #fffaf4;
+  --cool: #f4fafd;
+  --ease: cubic-bezier(0.45, 0, 0.35, 1);
+  --font: "Manrope", "Inter", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  --pad-l: max(1.25rem, env(safe-area-inset-left, 0px));
+  --pad-r: max(1.25rem, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-weight: 300;
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { font-weight: 200; text-wrap: balance; }
+a { color: inherit; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 2px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.wrap {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-left: var(--pad-l);
+  padding-right: var(--pad-r);
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: max(0.75rem, env(safe-area-inset-top, 0px));
+  padding-bottom: 0.75rem;
+  padding-left: var(--pad-l);
+  padding-right: var(--pad-r);
+  background: transparent;
+  transition: opacity 600ms var(--ease);
+}
+.site-header:focus-within { opacity: 1 !important; pointer-events: auto !important; }
+.logo { font-size: 1.25rem; font-weight: 300; letter-spacing: -0.01em; text-decoration: none; }
+.site-header__right { display: flex; align-items: center; gap: 0.5rem; }
+.link {
+  font-size: 0.9375rem; font-weight: 400; letter-spacing: 0.02em; text-decoration: none;
+  padding: 0.75rem 0.5rem; background-image: linear-gradient(var(--ink), var(--ink));
+  background-size: 0 1px; background-repeat: no-repeat; background-position: 0.5rem calc(100% - 0.7rem);
+  transition: background-size 700ms var(--ease);
+}
+@media (hover: hover) { .link:hover { background-size: calc(100% - 1rem) 1px; } }
+.icon-btn {
+  display: inline-grid; place-items: center; width: 44px; height: 44px; padding: 0;
+  background: transparent; border: 0; color: var(--ink); cursor: pointer; border-radius: 50%;
+}
+.icon-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
+.icon-btn[aria-checked="true"] .off, .icon-btn[aria-checked="false"] .on { display: none; }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  min-height: 100vh; min-height: 100svh;
+  display: grid; place-items: center;
+  padding-top: 5rem;
+  padding-bottom: max(3rem, env(safe-area-inset-bottom, 0px));
+  padding-left: var(--pad-l);
+  padding-right: var(--pad-r);
+  overflow: hidden;
+}
+.walls { position: absolute; inset: 0; pointer-events: none; }
+.wall {
+  position: absolute; top: 0; bottom: 0; width: 1px; background: var(--ink);
+  opacity: var(--o);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+  transition: transform 1200ms var(--ease), opacity 1200ms var(--ease);
+}
+.wall.l1 { left: 6vw;  --o: 0.12; }
+.wall.l2 { left: 11vw; --o: 0.06; transition-delay: 160ms; }
+.wall.r1 { right: 6vw; --o: 0.12; }
+.wall.r2 { right: 11vw; --o: 0.06; transition-delay: 160ms; }
+.js .hero:not(.is-open) .wall.l1, .js .hero:not(.is-open) .wall.l2 { transform: translateX(26vw); --o: 0.26; }
+.js .hero:not(.is-open) .wall.r1, .js .hero:not(.is-open) .wall.r2 { transform: translateX(-26vw); --o: 0.26; }
+
+.hero__canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.hero__orb { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.hero__circle {
+  width: min(78vw, 640px); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, rgba(142, 202, 230, 0.36) 0%, rgba(142, 202, 230, 0.2) 48%, rgba(142, 202, 230, 0) 71%);
+  animation: hero-breathe 14s infinite;
+}
+/* 4 с вдох, 4 с задержка, 6 с выдох */
+@keyframes hero-breathe {
+  0%      { transform: scale(0.8); animation-timing-function: var(--ease); }
+  28.57%  { transform: scale(1);   animation-timing-function: linear; }
+  57.14%  { transform: scale(1);   animation-timing-function: var(--ease); }
+  100%    { transform: scale(0.8); }
+}
+.hero__inner {
+  position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.hero__title {
+  font-size: clamp(6rem, 26vw, 21rem); font-weight: 200; line-height: 0.95; letter-spacing: -0.045em;
+  margin-left: -0.045em;
+}
+.hero__slogan {
+  margin-top: clamp(1rem, 3vw, 2rem); font-size: clamp(1.125rem, 2.6vw, 1.625rem);
+  font-weight: 300; color: var(--ink-2); max-width: 24ch;
+}
+.hero__action { margin-top: clamp(2rem, 5vw, 3.25rem); }
+.hero__note { margin-top: 1.5rem; font-size: 0.875rem; color: var(--ink-2); letter-spacing: 0.02em; }
+.btn {
+  font: inherit; font-size: 1.0625rem; font-weight: 400; letter-spacing: 0.02em;
+  color: var(--ink); background: transparent; border: 1px solid var(--ink); border-radius: 999px;
+  min-height: 52px; padding: 0.9rem 2.75rem; cursor: pointer;
+  transition: background-color 800ms var(--ease), color 800ms var(--ease);
+}
+@media (hover: hover) { .btn:hover { background: var(--ink); color: #fff; } }
+.btn--small { font-size: 0.9375rem; padding: 0.7rem 1.75rem; min-height: 44px; }
+
+.rise { animation: rise 1200ms var(--ease) both; }
+.rise.d1 { animation-delay: 200ms; } .rise.d2 { animation-delay: 650ms; }
+.rise.d3 { animation-delay: 950ms; } .rise.d4 { animation-delay: 1200ms; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Sections ---------- */
+.section-title { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.15; letter-spacing: -0.025em; }
+.how { padding-block: clamp(6rem, 16vw, 12rem); }
+.steps {
+  list-style: none; margin: clamp(3.5rem, 9vw, 7rem) 0 0; padding: 0;
+  display: grid; grid-template-columns: 1fr; gap: clamp(3rem, 8vw, 5rem);
+}
+@media (min-width: 760px) { .steps { grid-template-columns: repeat(3, 1fr); gap: clamp(2rem, 6vw, 5rem); } }
+.step { min-width: 0; }
+.icon { display: block; width: 64px; height: 64px; fill: none; stroke: var(--ink); stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; }
+.icon .sky { stroke: var(--sky); stroke-width: 1.25; }
+.step h3 { margin-top: 1.75rem; font-size: 1.75rem; font-weight: 300; letter-spacing: -0.01em; }
+.step p { margin-top: 0.75rem; color: var(--ink-2); max-width: 28ch; }
+
+.who { display: grid; grid-template-columns: 1fr; }
+@media (min-width: 820px) { .who { grid-template-columns: 1fr 1fr; } }
+.who__col { padding-block: clamp(5rem, 12vw, 9rem); min-width: 0; }
+.who__col--warm { background: var(--warm); padding-left: var(--pad-l); padding-right: clamp(1.25rem, 5vw, 4rem); }
+.who__col--cool { background: var(--cool); padding-left: clamp(1.25rem, 5vw, 4rem); padding-right: var(--pad-r); }
+@media (min-width: 820px) {
+  .who__col--warm { padding-left: max(var(--pad-l), calc((100vw - 1200px) / 2 + 1.25rem)); }
+  .who__col--cool { padding-right: max(var(--pad-r), calc((100vw - 1200px) / 2 + 1.25rem)); }
+}
+.who__inner { max-width: 30rem; }
+.motif { display: block; width: 120px; height: 40px; fill: none; stroke: var(--ink); stroke-width: 1; opacity: 0.55; }
+.motif .sky { stroke: var(--sky); stroke-width: 1.25; opacity: 1; }
+.eyebrow { margin-top: 2.5rem; font-size: 0.8125rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); font-weight: 400; }
+.who h2 { margin-top: 0.75rem; font-size: clamp(2.75rem, 7vw, 5rem); line-height: 1.05; letter-spacing: -0.035em; }
+.who__lead { margin-top: 2rem; font-size: clamp(1.25rem, 2.4vw, 1.5rem); line-height: 1.5; font-weight: 300; }
+.who__text { margin-top: 0.75rem; color: var(--ink-2); max-width: 30ch; }
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding-top: clamp(3.5rem, 8vw, 6rem);
+  padding-bottom: max(2rem, env(safe-area-inset-bottom, 0px));
+}
+.footer__grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; align-items: start; }
+@media (min-width: 820px) { .footer__grid { grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center; } }
+.footer__brand { min-width: 0; }
+.footer__name { font-size: 1.5rem; font-weight: 300; letter-spacing: -0.01em; }
+.footer__slogan { margin-top: 0.25rem; font-size: 0.875rem; color: var(--ink-2); }
+.footer__phrase { font-size: clamp(1.125rem, 2.2vw, 1.375rem); font-weight: 200; letter-spacing: 0.01em; }
+.footer__right { display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start; min-width: 0; }
+@media (min-width: 820px) { .footer__right { align-items: flex-end; } }
+.footer__mail { font-size: 0.9375rem; overflow-wrap: anywhere; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.switch {
+  display: inline-flex; align-items: center; gap: 0.75rem; min-height: 44px; padding: 0;
+  background: transparent; border: 0; font: inherit; font-size: 0.9375rem; color: var(--ink); cursor: pointer;
+}
+.switch__track { position: relative; width: 32px; height: 16px; border: 1px solid var(--ink); border-radius: 999px; }
+.switch__knob {
+  position: absolute; top: 3px; left: 3px; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ink); transition: transform 600ms var(--ease), background-color 600ms var(--ease);
+}
+.switch[aria-checked="true"] .switch__knob { transform: translateX(16px); background: var(--sky); }
+.switch__state { min-width: 2.5rem; color: var(--ink-2); font-size: 0.875rem; }
+.footer__legal { margin-top: clamp(3rem, 7vw, 5rem); font-size: 0.8125rem; color: var(--ink-2); }
+.footer__legal a { text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+/* ---------- Scroll reveal ---------- */
+.js [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity 1000ms var(--ease), transform 1000ms var(--ease); }
+.js [data-reveal].is-in { opacity: 1; transform: none; }
+.js [data-reveal][data-delay="1"] { transition-delay: 150ms; }
+.js [data-reveal][data-delay="2"] { transition-delay: 300ms; }
+
+/* ---------- Breathing overlay ---------- */
+.breath {
+  position: fixed; inset: 0; z-index: 50; background: #fff;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem;
+  padding: max(1.5rem, env(safe-area-inset-top, 0px)) var(--pad-r) max(1.5rem, env(safe-area-inset-bottom, 0px)) var(--pad-l);
+  opacity: 0; transition: opacity 700ms var(--ease);
+}
+.breath.is-visible { opacity: 1; }
+.breath__close, .breath__sound { position: absolute; top: max(0.75rem, env(safe-area-inset-top, 0px)); }
+.breath__close { right: max(0.75rem, env(safe-area-inset-right, 0px)); }
+.breath__sound { left: max(0.75rem, env(safe-area-inset-left, 0px)); }
+.breath__stage { position: relative; width: min(72vmin, 440px); aspect-ratio: 1; display: grid; place-items: center; }
+.breath__ring, .breath__circle { position: absolute; inset: 0; border-radius: 50%; }
+.breath__ring { border: 1px solid var(--sky); }
+.breath__circle {
+  background: radial-gradient(circle, rgba(142, 202, 230, 0.8) 0%, rgba(142, 202, 230, 0.55) 62%, rgba(142, 202, 230, 0.36) 100%);
+  transform: scale(0.5); will-change: transform;
+}
+.breath__label { position: relative; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; text-align: center; }
+.breath__count { font-size: clamp(3rem, 12vmin, 4.5rem); font-weight: 200; line-height: 1; min-height: 1em; font-variant-numeric: tabular-nums; }
+.breath__phase { font-size: clamp(1.125rem, 3.5vmin, 1.5rem); font-weight: 300; letter-spacing: 0.02em; }
+.breath__foot { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; min-height: 7rem; justify-content: flex-start; text-align: center; }
+.breath__bar { width: min(240px, 60vw); height: 1px; background: var(--line); }
+.breath__fill { height: 100%; background: var(--ink); transform-origin: left center; transform: scaleX(0); }
+.breath__time { font-size: 0.875rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.breath__done { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+.breath__done p { font-size: 1.125rem; max-width: 26ch; }
+.breath__done div { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; }
+  .js [data-reveal] { opacity: 1; transform: none; }
+  .js .hero:not(.is-open) .wall { transform: none; }
+  .hero__circle { transform: scale(0.92); }
+}
+</style>
+</head>
+<body>
+<div id="page">
+
+  <header class="site-header" id="top">
+    <a class="logo" href="#hero" aria-label="Вдох, в начало страницы">Вдох</a>
+    <nav class="site-header__right" aria-label="Действия">
+      <a class="link" href="#hero" data-breathe>Дышать</a>
+      <button class="icon-btn js-sound" type="button" role="switch" aria-checked="false" aria-label="Звук">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z"/>
+          <path class="on" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/>
+          <path class="off" d="M16 9.5l5 5M21 9.5l-5 5"/>
+        </svg>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 1. Герой -->
+    <section class="hero" id="hero" aria-labelledby="hero-title">
+      <div class="walls" aria-hidden="true">
+        <i class="wall l1"></i><i class="wall l2"></i><i class="wall r1"></i><i class="wall r2"></i>
+      </div>
+      <canvas class="hero__canvas" id="particles" aria-hidden="true"></canvas>
+      <div class="hero__orb" aria-hidden="true"><div class="hero__circle"></div></div>
+
+      <div class="hero__inner">
+        <h1 class="hero__title rise d1" id="hero-title">Вдох</h1>
+        <p class="hero__slogan rise d2">Один вдох — и стены отступают.</p>
+        <div class="hero__action rise d3">
+          <button class="btn" type="button" data-breathe aria-label="Дышать: запустить дыхательную практику на 60 секунд">Дышать</button>
+        </div>
+        <p class="hero__note rise d4">60 секунд. Без звука. Прямо в лифте.</p>
+      </div>
+    </section>
+
+    <!-- 2. Как это работает -->
+    <section class="how" id="how" aria-labelledby="how-title">
+      <div class="wrap">
+        <h2 class="section-title" id="how-title" data-reveal>Как это работает</h2>
+        <ol class="steps">
+          <li class="step" data-reveal>
+            <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+              <rect x="9" y="10" width="19" height="44"/>
+              <rect x="36" y="10" width="19" height="44"/>
+              <path class="sky" d="M23 32h-8M18.5 28l-4 4 4 4M41 32h8M45.5 28l4 4-4 4"/>
+            </svg>
+            <h3>Открой</h3>
+            <p>Сайт грузится мгновенно и работает без звука.</p>
+          </li>
+          <li class="step" data-reveal data-delay="1">
+            <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="32" cy="32" r="7"/>
+              <circle class="sky" cx="32" cy="32" r="16"/>
+              <circle cx="32" cy="32" r="25" stroke-dasharray="1 5"/>
+            </svg>
+            <h3>Дыши</h3>
+            <p>Следуй за кругом: вдох — задержка — выдох.</p>
+          </li>
+          <li class="step" data-reveal data-delay="2">
+            <svg class="icon" viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="32" cy="32" r="19"/>
+              <circle class="sky" cx="32" cy="32" r="26"/>
+              <path d="M24 36l8-8 8 8"/>
+            </svg>
+            <h3>Выходи</h3>
+            <p>Нажми этаж и почувствуй лёгкость.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 3. Кому это нужно -->
+    <section class="who" aria-label="Кому это нужно">
+      <div class="who__col who__col--warm">
+        <div class="who__inner" data-reveal>
+          <svg class="motif" viewBox="0 0 120 40" aria-hidden="true">
+            <path d="M50 2v36M70 2v36"/><circle class="sky" cx="60" cy="20" r="3.5"/>
+          </svg>
+          <p class="eyebrow">Для клаустрофобов</p>
+          <h2>Если тесно</h2>
+          <p class="who__lead">Стены давят? Верни себе воздух.</p>
+          <p class="who__text">Простые техники, которые работают прямо в моменте.</p>
+        </div>
+      </div>
+      <div class="who__col who__col--cool">
+        <div class="who__inner" data-reveal data-delay="1">
+          <svg class="motif" viewBox="0 0 120 40" aria-hidden="true">
+            <path d="M6 2v36M114 2v36"/><circle class="sky" cx="60" cy="20" r="12"/>
+          </svg>
+          <p class="eyebrow">Для офисных работников</p>
+          <h2>Если душно</h2>
+          <p class="who__lead">Перезагрузка между встречами.</p>
+          <p class="who__text">Минута воздуха — и снова легко.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 4. Подвал -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <p class="footer__name">Вдох</p>
+          <p class="footer__slogan">Один вдох — и стены отступают.</p>
+        </div>
+        <p class="footer__phrase">Воздух всегда с тобой.</p>
+        <div class="footer__right">
+          <a class="footer__mail" href="mailto:hello@vdoh.example">hello@vdoh.example</a>
+          <button class="switch js-sound" type="button" role="switch" aria-checked="false">
+            <span>Звук</span>
+            <span class="switch__track" aria-hidden="true"><span class="switch__knob"></span></span>
+            <span class="switch__state js-sound-state" aria-hidden="true">выкл</span>
+          </button>
+        </div>
+      </div>
+      <p class="footer__legal">© 2026 · <a href="#privacy">Политика конфиденциальности</a></p>
+    </div>
+  </footer>
+</div>
+
+<!-- Дыхательная практика -->
+<div class="breath" id="breath" role="dialog" aria-modal="true" aria-labelledby="breath-title" hidden>
+  <h2 class="sr-only" id="breath-title">Дыхательная практика, 60 секунд</h2>
+
+  <button class="icon-btn breath__sound js-sound" type="button" role="switch" aria-checked="false" aria-label="Звук">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z"/>
+      <path class="on" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/>
+      <path class="off" d="M16 9.5l5 5M21 9.5l-5 5"/>
+    </svg>
+  </button>
+  <button class="icon-btn breath__close" id="breath-close" type="button" aria-label="Закрыть практику">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+
+  <div class="breath__stage">
+    <div class="breath__ring" aria-hidden="true"></div>
+    <div class="breath__circle" id="breath-circle" aria-hidden="true"></div>
+    <div class="breath__label">
+      <span class="breath__count" id="breath-count" aria-hidden="true"></span>
+      <span class="breath__phase" id="breath-phase" aria-live="polite">Приготовься</span>
+    </div>
+  </div>
+
+  <div class="breath__foot">
+    <div id="breath-progress" aria-hidden="true" style="display:flex;flex-direction:column;align-items:center;gap:0.75rem">
+      <div class="breath__bar"><div class="breath__fill" id="breath-fill"></div></div>
+      <p class="breath__time" id="breath-time">60 с</p>
+    </div>
+    <div class="breath__done" id="breath-done" hidden>
+      <p>Стены стали дальше. Можно вернуться к делам или подышать ещё.</p>
+      <div>
+        <button class="btn btn--small" type="button" id="breath-again">Ещё раз</button>
+        <button class="btn btn--small" type="button" id="breath-finish">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var doc = document, root = doc.documentElement;
+  function $(s, c) { return (c || doc).querySelector(s); }
+  function $$(s, c) { return Array.prototype.slice.call((c || doc).querySelectorAll(s)); }
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var reduce = mq.matches;
+  var onMotionChange = function (e) { reduce = e.matches; syncParticles(); };
+  if (mq.addEventListener) { mq.addEventListener('change', onMotionChange); }
+  else if (mq.addListener) { mq.addListener(onMotionChange); }
+
+  /* ---------- Стены расступаются ---------- */
+  var hero = $('#hero');
+  function openWalls() { hero.classList.add('is-open'); }
+  if (reduce) { openWalls(); }
+  else { setTimeout(function () { requestAnimationFrame(openWalls); }, 350); }
+
+  /* ---------- Шапка растворяется при скролле ---------- */
+  var header = $('.site-header');
+  var sy = 0, ticking = false;
+  function onScroll() {
+    if (ticking) { return; }
+    ticking = true;
+    requestAnimationFrame(function () {
+      sy = window.pageYOffset || 0;
+      var k = Math.min(1, sy / (window.innerHeight * 0.45));
+      header.style.opacity = String(1 - k);
+      header.style.pointerEvents = k > 0.9 ? 'none' : '';
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* ---------- Появление блоков ---------- */
+  var reveals = $$('[data-reveal]');
+  if ('IntersectionObserver' in window) {
+    var rio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('is-in'); rio.unobserve(en.target); }
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(function (el) { rio.observe(el); });
+  } else {
+    reveals.forEach(function (el) { el.classList.add('is-in'); });
+  }
+
+  /* ---------- Частицы ---------- */
+  var canvas = $('#particles');
+  var ctx = canvas.getContext('2d');
+  var W = 0, H = 0, parts = [], pRaf = 0, pRun = false, lastT = 0, heroVisible = true;
+
+  function seed() {
+    var n = Math.max(18, Math.min(46, Math.round(W / 28)));
+    parts = [];
+    for (var i = 0; i < n; i++) {
+      parts.push({
+        x: rand(0, W), y: rand(0, H), r: rand(1, 3.2), z: rand(0.3, 1),
+        vx: rand(-0.012, 0.012), vy: -rand(0.012, 0.03),
+        ph: rand(0, 6.283), a: rand(0.25, 0.7), c: Math.random() < 0.7 ? 0 : 1
+      });
+    }
+  }
+  function resizeCanvas() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = hero.clientWidth; H = hero.clientHeight;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    seed();
+    drawParticles(0);
+  }
+  function drawParticles(t) {
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      var py = p.y - (reduce ? 0 : sy * 0.18 * p.z);
+      py = ((py % H) + H) % H;
+      var px = p.x + (reduce ? 0 : Math.sin(t * 0.0004 + p.ph) * 10 * p.z);
+      px = ((px % W) + W) % W;
+      ctx.beginPath();
+      ctx.arc(px, py, p.r * p.z + 0.4, 0, 6.2832);
+      ctx.fillStyle = p.c ? 'rgba(26,26,26,' + (p.a * 0.28).toFixed(3) + ')' : 'rgba(142,202,230,' + p.a.toFixed(3) + ')';
+      ctx.fill();
+    }
+  }
+  function frame(t) {
+    if (!pRun) { return; }
+    var dt = Math.min(64, t - lastT); lastT = t;
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      p.x += p.vx * dt; p.y += p.vy * dt * p.z;
+      if (p.y < 0) { p.y += H; }
+    }
+    drawParticles(t);
+    pRaf = requestAnimationFrame(frame);
+  }
+  function syncParticles() {
+    var should = heroVisible && !doc.hidden && !reduce;
+    if (should && !pRun) { pRun = true; lastT = performance.now(); pRaf = requestAnimationFrame(frame); }
+    else if (!should && pRun) { pRun = false; cancelAnimationFrame(pRaf); }
+    if (reduce) { drawParticles(0); }
+  }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) { heroVisible = en[0].isIntersecting; syncParticles(); }).observe(hero);
+  }
+  doc.addEventListener('visibilitychange', syncParticles);
+  var rzT = 0;
+  window.addEventListener('resize', function () {
+    cancelAnimationFrame(rzT);
+    rzT = requestAnimationFrame(resizeCanvas);
+  });
+  resizeCanvas();
+  syncParticles();
+  onScroll();
+
+  /* ---------- Звук (по умолчанию выключен) ---------- */
+  var soundOn = false, actx = null, tone = null;
+  var soundBtns = $$('.js-sound');
+  var soundStates = $$('.js-sound-state');
+
+  function renderSound() {
+    soundBtns.forEach(function (b) { b.setAttribute('aria-checked', soundOn ? 'true' : 'false'); });
+    soundStates.forEach(function (s) { s.textContent = soundOn ? 'вкл' : 'выкл'; });
+  }
+  function ensureAudio() {
+    if (actx) { return actx; }
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) { return null; }
+    actx = new AC();
+    return actx;
+  }
+  function toneStart() {
+    if (!soundOn || tone || mode === 'idle') { return; }
+    var ac = ensureAudio();
+    if (!ac) { return; }
+    if (ac.state === 'suspended') { ac.resume(); }
+    var master = ac.createGain(); master.gain.value = 0.0001; master.connect(ac.destination);
+    var o1 = ac.createOscillator(), o2 = ac.createOscillator(), g2 = ac.createGain();
+    o1.type = 'sine'; o2.type = 'sine'; o1.frequency.value = 196; o2.frequency.value = 294; g2.gain.value = 0.5;
+    o1.connect(master); o2.connect(g2); g2.connect(master);
+    o1.start(); o2.start();
+    tone = { master: master, o1: o1, o2: o2 };
+  }
+  function toneStop() {
+    if (!tone) { return; }
+    var t = actx.currentTime, n = tone; tone = null;
+    n.master.gain.cancelScheduledValues(t);
+    n.master.gain.setValueAtTime(n.master.gain.value, t);
+    n.master.gain.linearRampToValueAtTime(0.0001, t + 0.6);
+    setTimeout(function () { try { n.o1.stop(); n.o2.stop(); } catch (e) {} }, 700);
+  }
+  function tonePhase(name, secs) {
+    if (!tone || !actx) { return; }
+    var t = actx.currentTime, g = tone.master.gain;
+    var f1 = tone.o1.frequency, f2 = tone.o2.frequency;
+    [g, f1, f2].forEach(function (p) { p.cancelScheduledValues(t); p.setValueAtTime(p.value, t); });
+    if (name === 'in') {
+      g.linearRampToValueAtTime(0.06, t + secs);
+      f1.linearRampToValueAtTime(247, t + secs); f2.linearRampToValueAtTime(370, t + secs);
+    } else if (name === 'hold') {
+      g.linearRampToValueAtTime(0.06, t + 0.2);
+    } else {
+      g.linearRampToValueAtTime(0.0001, t + secs);
+      f1.linearRampToValueAtTime(196, t + secs); f2.linearRampToValueAtTime(294, t + secs);
+    }
+  }
+  soundBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      soundOn = !soundOn;
+      renderSound();
+      if (soundOn) { toneStart(); if (phaseNow) { tonePhase(phaseNow.key, Math.max(0.2, phaseNow.remain)); } }
+      else { toneStop(); }
+    });
+  });
+  renderSound();
+
+  /* ---------- Дыхательная практика: 4 — 4 — 6, 60 секунд ---------- */
+  var page = $('#page'), overlay = $('#breath');
+  var circle = $('#breath-circle'), countEl = $('#breath-count'), phaseEl = $('#breath-phase');
+  var fill = $('#breath-fill'), timeEl = $('#breath-time');
+  var progress = $('#breath-progress'), done = $('#breath-done');
+  var closeBtn = $('#breath-close');
+
+  var PHASES = [
+    { key: 'in',   name: 'Вдох',     dur: 4, off: 0, from: 0.5, to: 1 },
+    { key: 'hold', name: 'Задержка', dur: 4, off: 4, from: 1,   to: 1 },
+    { key: 'out',  name: 'Выдох',    dur: 6, off: 8, from: 1,   to: 0.5 }
+  ];
+  var CYCLE = 14, TOTAL = 60, LEAD = 2, END = 3;
+  var mode = 'idle', startAt = 0, bRaf = 0, phaseIdx = -1, phaseNow = null;
+  var trigger = null, closeTimer = 0;
+
+  function ease(p) { return (1 - Math.cos(Math.PI * p)) / 2; }
+  function setScale(s, frac) {
+    if (reduce) {
+      circle.style.transform = 'scale(1)';
+      circle.style.opacity = String(0.35 + 0.65 * ((s - 0.5) / 0.5));
+    } else {
+      circle.style.transform = 'scale(' + s.toFixed(4) + ')';
+      circle.style.opacity = '';
+    }
+  }
+  function setPhase(text) { if (phaseEl.textContent !== text) { phaseEl.textContent = text; } }
+
+  function tick(now) {
+    if (mode === 'idle' || mode === 'done') { return; }
+
+    if (mode === 'lead') {
+      setScale(0.5);
+      if ((now - startAt) / 1000 >= LEAD) { mode = 'run'; startAt = now; phaseIdx = -1; }
+      else { bRaf = requestAnimationFrame(tick); return; }
+    }
+
+    if (mode === 'run') {
+      var t = (now - startAt) / 1000;
+      if (t >= TOTAL) {
+        mode = 'end'; startAt = now; phaseNow = { key: 'out', remain: END };
+        setPhase('Выдохни'); countEl.textContent = '';
+        fill.style.transform = 'scaleX(1)'; timeEl.textContent = '0 с';
+        tonePhase('out', END);
+      } else {
+        var ct = t % CYCLE;
+        var i = ct < 4 ? 0 : (ct < 8 ? 1 : 2);
+        var ph = PHASES[i], local = ct - ph.off, p = local / ph.dur;
+        if (i !== phaseIdx) {
+          phaseIdx = i; setPhase(ph.name); tonePhase(ph.key, ph.dur);
+        }
+        phaseNow = { key: ph.key, remain: ph.dur - local };
+        setScale(ph.from + (ph.to - ph.from) * ease(Math.min(1, p)));
+        countEl.textContent = String(Math.max(1, Math.ceil(ph.dur - local)));
+        fill.style.transform = 'scaleX(' + (t / TOTAL).toFixed(4) + ')';
+        timeEl.textContent = Math.ceil(TOTAL - t) + ' с';
+      }
+    } else if (mode === 'end') {
+      var e = Math.min(1, (now - startAt) / (END * 1000));
+      setScale(1 - 0.5 * ease(e));
+      if (e >= 1) { finish(); return; }
+    }
+    bRaf = requestAnimationFrame(tick);
+  }
+
+  function begin() {
+    cancelAnimationFrame(bRaf);
+    mode = 'lead'; phaseIdx = -1; phaseNow = null;
+    startAt = performance.now();
+    done.hidden = true; progress.hidden = false;
+    fill.style.transform = 'scaleX(0)'; timeEl.textContent = TOTAL + ' с';
+    countEl.textContent = ''; setPhase('Приготовься'); setScale(0.5);
+    toneStart();
+    bRaf = requestAnimationFrame(tick);
+  }
+  function finish() {
+    mode = 'done'; phaseNow = null;
+    setScale(0.5); countEl.textContent = ''; setPhase('Хорошо');
+    progress.hidden = true; done.hidden = false;
+    toneStop();
+    $('#breath-again').focus({ preventScroll: true });
+  }
+  function openBreath(from) {
+    clearTimeout(closeTimer);
+    trigger = from || null;
+    overlay.hidden = false;
+    page.inert = true;
+    root.style.overflow = 'hidden';
+    void overlay.offsetWidth;
+    overlay.classList.add('is-visible');
+    closeBtn.focus({ preventScroll: true });
+    begin();
+  }
+  function closeBreath() {
+    if (overlay.hidden) { return; }
+    cancelAnimationFrame(bRaf);
+    mode = 'idle'; phaseNow = null;
+    toneStop();
+    overlay.classList.remove('is-visible');
+    closeTimer = setTimeout(function () {
+      overlay.hidden = true;
+      page.inert = false;
+      root.style.overflow = '';
+      if (trigger && trigger.focus) { trigger.focus({ preventScroll: true }); }
+    }, reduce ? 0 : 700);
+  }
+
+  $$('[data-breathe]').forEach(function (el) {
+    el.addEventListener('click', function (ev) { ev.preventDefault(); openBreath(el); });
+  });
+  closeBtn.addEventListener('click', closeBreath);
+  $('#breath-finish').addEventListener('click', closeBreath);
+  $('#breath-again').addEventListener('click', begin);
+  doc.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape' && !overlay.hidden) { closeBreath(); }
+  });
+})();
+</script>
+</body>
+</html>
